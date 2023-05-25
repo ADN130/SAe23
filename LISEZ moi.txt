@@ -8,3 +8,5 @@ Quelques instructions pour que tout se passe correctement :
 - Créer votre propre branch et quand vous êtes surs de vous, mergez sur la prod
 
 Bon travail ! 
+
+parfait :)
