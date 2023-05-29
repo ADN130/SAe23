@@ -2,6 +2,8 @@
 	session_start();
 	$_SESSION["mdp"]=$_REQUEST["mdp"];  // recovering password from login_admin form
 	$motdep=$_SESSION["mdp"];
+	$_SESSION["login"]=$_REQUEST["login"];  // recovering username from login_admin form
+	$utilisateur=$_SESSION["login"];
 	$_SESSION["auth"]=FALSE;
 
 	// Authentication script using "administration" table
@@ -13,16 +15,29 @@
 		/* Access to database */
 		include ("mysql.php");
 
-		$requete = "SELECT `mdp` FROM `administration`";
-		$resultat = mysqli_query($id_bd, $requete)
-			or die("Execution de la requete impossible : $requete");
+		$user = mysqli_query($id_bd, 'SELECT `login` FROM `administration` WHERE login="admin"')
+			or die("Execution de la requete impossible : $user");
+		$pass = mysqli_query($id_bd, 'SELECT `mdp` FROM `administration` WHERE login="admin"')
+			or die("Execution de la requete impossible : $pass");
 
-		$ligne = mysqli_fetch_row($resultat);
-		if ($motdep==$ligne[0])
+		$ligne1 = mysqli_fetch_row($user);
+		$ligne2 = mysqli_fetch_row($pass);
+		if ($utilisateur==$ligne1[0]) 
 		 {
-			$_SESSION["auth"]=TRUE;		
-            mysqli_close($id_bd);
-			echo "<script type='text/javascript'>document.location.replace('admin.php');</script>"; // Redirection on successful login
+		 	if ($motdep==$ligne2[0])
+		 		{
+					$_SESSION["auth"]=TRUE;		
+            		mysqli_close($id_bd);
+					echo "<script type='text/javascript'>document.location.replace('admin.php');</script>"; // Redirection on successful login
+		 		}
+		 	else
+		    	{
+					$_SESSION = array();
+            		session_destroy();  
+            		unset($_SESSION); 
+            		mysqli_close($id_bd);
+            		echo "<script type='text/javascript'>document.location.replace('login_error.php');</script>"; // Redirection on failed login
+				}
 		 }
 		else
 		 {

@@ -11,27 +11,22 @@
 		<link rel="stylesheet" type="text/css" href="./styles/style.css" />
 	</head>
 	<body>
-		<section>
-			<p>
-				<br/>
-				<em><strong>Acces aux comptes gestionnaires</strong></em>
-				<br/>
-			</p>
-			<form action="login_gestionnaire_script.php" method="post" enctype="multipart/form-data">
-				<fieldset>
-					<legend>Saissez le nom de gestionnaire</legend>
-					<label for="login">Gestionnaire : </label>
-					<input type="username" name="login" id="login" />
-					<legend>Saissez le mot de passe...</legend>
-					<label for="mdp">Mot de passe : </label>
-					<input type="password" name="mdp" id="mdp" />
-				</fieldset>
-				<p>
-					<input type="submit" value="Valider" />
-				</p>
-			</form>
-			<hr />
-		</section>
+    	<div class="center">
+      		<h1>Acces aux comptes gestionnaire</h1>
+      		<form action="login_gestionnaire_script.php" method="post" enctype="multipart/form-data">
+        		<div class="txt_field">
+          		<input type="username" name="login" id="login" />
+          		<span></span>
+          		<label for="login">Nom de compte</label>
+        		</div>
+        		<div class="txt_field">
+          		<input type="password" name="mdp" id="mdp" />
+          		<span></span>
+          		<label for="mdp">Mot de passe</label>
+        		</div>
+        		<input type="submit" value="Valider">
+      		</form>
+    	</div>
 		<footer>
 		</footer>
 	</body>

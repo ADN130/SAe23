@@ -21,11 +21,11 @@
 		<section>
 			<p>
 				<br />
-				<em><strong>Acces aux comptes gestionnaires</strong></em>
+				<em><strong>Acces au compte impossible</strong></em>
 				<br />
 			</p>
 			<br />
-			<p class="erreur">Mot de passe non saisi ou erron&eacute; !!!</p>
+			<p class="erreur">Mot de passe non saisi ou erron&eacute;</p>
 			<br />
 			<hr />
 		</section>
