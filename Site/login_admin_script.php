@@ -26,7 +26,7 @@
 		 {
 		 	if ($motdep==$ligne2[0])
 		 		{
-					$_SESSION["auth"]=TRUE;		
+					$_SESSION["auth"]="admin";		
             		mysqli_close($id_bd);
 					echo "<script type='text/javascript'>document.location.replace('admin.php');</script>"; // Redirection on successful login
 		 		}

@@ -12,8 +12,8 @@
 	$login="$login";
 	$mdp="$mdp";
 	$virg=',';
-	$apo='"';
-	$i="({$apo}{$id}{$apo}{$virg} {$apo}{$nom}{$apo}{$virg} {$apo}{$login}{$apo}{$virg} {$apo}{$mdp}{$apo})";
+	$gui='"';
+	$i="({$gui}{$id}{$gui}{$virg} {$gui}{$nom}{$gui}{$virg} {$gui}{$login}{$gui}{$virg} {$gui}{$mdp}{$gui})";
 
 	$req="INSERT INTO `sae23`.`batiment` (`id-batiment`, `nom`, `login`, `mdp`) VALUES {$i}";
 	//$req='INSERT INTO `sae23`.`batiment` (`id-batiment`, `nom`, `login`, `mdp`) VALUES '+'('+$id+',' +$nom+',' +$login+',' +$mdp+')';
@@ -21,6 +21,6 @@
 	mysqli_query($id_bd, $req)
 		or die("Execution de l ajout impossible : $req");
 	mysqli_close($id_bd);
-	echo "<script type='text/javascript'>document.location.replace('login_admin.php');</script>"; // Redirection on successful addition											
+	echo "<script type='text/javascript'>document.location.replace('admin.php');</script>"; // Redirection on successful addition											
 ?>
 

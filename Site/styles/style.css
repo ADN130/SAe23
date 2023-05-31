@@ -8,6 +8,15 @@
 											/* Césure qui permet un retour à la ligne pour les mots trop longs (ex: les URL dans "Mentions légales") */
 }
 
+a{
+	color:white
+}
+
+
+a:visited{
+	color:white
+}
+
 header{
 	position: fixed; 													/* Le header reste visible tout le long de la page */
   top: 0; 
