@@ -5,20 +5,20 @@
 while true 
 do 
 
-# Souscription to the B building
+# Subscription to building B
 
-abo_B113=$(mosquitto_sub -h mqtt.iut-blagnac.fr -t "Student/by-room/B113/data" -C 1) #souscription to the topic
+abo_B113=$(mosquitto_sub -h mqtt.iut-blagnac.fr -t "Student/by-room/B113/data" -C 1) #subscription to the topic
 temp=$(echo $abo_B113 | jq '.[0].temperature') #getting the temperature
 hum=$(echo $abo_B113 | jq '.[0].humidity') #same thing for the humidity
 date=$(date +%F) #getting the date
 heure=$(date +%X) # getting the hour 
 
-# ID of the differents sensors
+# ID of the different sensors
 
 ID_cap=3 
 ID_cap2=4
 
-# Souscription to the E building
+# Subscription to building E
 
 abo_E209=$(mosquitto_sub -h mqtt.iut-blagnac.fr -t "Student/by-room/E209/data" -C 1)  
 temp_209=$(echo $abo_E209 | jq '.[0].temperature') 
@@ -40,13 +40,13 @@ echo "Bâtiement E :" "température :" $hum_209 "," "date et heure :" $date_209 
 
 #Insertion of temperature and humidity measures for both building 
 
-#Insertion for the B building 
+#Insertion for building B 
 
  echo "INSERT INTO sae23.mesure (date, heure, valeur, \`id-capteur\`) VALUES ('$date', '$heure', '$temp', '$ID_cap');" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85
 
  echo "INSERT INTO sae23.mesure (date, heure, valeur, \`id-capteur\`) VALUES ('$date', '$heure', '$hum', '$ID_cap2');" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85
 
-#Insertion for the E building 
+#Insertion for building E 
 
 echo "INSERT INTO sae23.mesure (date, heure, valeur, \`id-capteur\`) VALUES ('$date_209', '$heure_209', '$temp_209', '$ID_cap_E209');" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85
 
