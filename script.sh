@@ -11,7 +11,7 @@ abo_B113=$(mosquitto_sub -h mqtt.iut-blagnac.fr -t "Student/by-room/B113/data" -
 temp=$(echo $abo_B113 | jq '.[0].temperature') #getting the temperature
 hum=$(echo $abo_B113 | jq '.[0].humidity') #same thing for the humidity
 date=$(date +%F) #getting the date
-heure=$(date +%X) # getting the hour 
+heure=$(date +%X) #getting the hour 
 
 # ID of the different sensors
 
@@ -30,7 +30,7 @@ ID_cap_E209_2=2
 
 
 
-# Test of the values obtained
+# Displaying the values obtained
 
 echo "Bâtiement B :" "température :" $temp "," "date et heure :" $date $heure  
 echo "Bâtiement B :" "humidité :" $hum "," "date et heure :" $date $heure  
