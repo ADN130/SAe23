@@ -2,34 +2,33 @@
 
 #--------------------------------------SCRIPT DYNAMIQUE-----------------------------------------
 
-nbBatiments=$(echo "SELECT COUNT(\`id-batiment\`) FROM \`sae23\`.\`batiment\`;" | /opt/lampp/bin/mysql -h localhost -u sarrat -ppassroot | sed -n 2p)
+nbBatiments=$(echo "SELECT COUNT(\`id-batiment\`) FROM \`sae23\`.\`batiment\`;" | /opt/lampp/bin/mysql -h localhost -u sarrat -ppassroot | sed -n 2p) #finds how many buildings are in the "batiment" table
 
 echo "Il y a $nbBatiments batiment(s) dans la base de données"
 
-for (( i=0; i<$nbBatiments; i++ ))
+for (( i=0; i<$nbBatiments; i++ )) #loop that goes from 0 to the number of building minus one
 
 do
 
-bat=$(echo "SELECT nom FROM \`sae23\`.\`batiment\` LIMIT $i,1;" | /opt/lampp/bin/mysql -h localhost -u sarrat -ppassroot | sed -n 2p)
+bat=$(echo "SELECT nom FROM \`sae23\`.\`batiment\` LIMIT $i,1;" | /opt/lampp/bin/mysql -h localhost -u sarrat -ppassroot | sed -n 2p) #variable that contains the name of the building we will be accessing the measures of
 echo "Bâtiment traité : $bat "
 
-#mes=$(mosquitto_sub -h mqtt.iut-blagnac.fr -t "Student/by-room/$bat/data" -C 1)
-mesure=$(mosquitto_sub -h 127.0.0.1 -t "Student/by-room/$bat/data" -C 1)
+#mesure=$(mosquitto_sub -h mqtt.iut-blagnac.fr -t "Student/by-room/$bat/data" -C 1) #may be uncommented in order to use the IUT broker while it's up
+mesure=$(mosquitto_sub -h 127.0.0.1 -t "Student/by-room/$bat/data" -C 1) #used together with the broker.sh script for faster debugging
 
-date=$(date +%F)
-heure=$(date +%X)
-valeur=$(echo $mesure | jq '.[0].temperature')
+idCap=$(echo "SELECT \`id-capteur\` FROM \`sae23\`.\`capteur\` JOIN \`sae23\`.\`batiment\` ON \`capteur\`.\`id-batiment\`=\`batiment\`.\`id-batiment\` WHERE \`batiment\`.\`nom\`=\"$bat\" LIMIT 0,1;" | /opt/lampp/bin/mysql -h localhost -u sarrat -ppassroot | sed -n 2p) #finds the ID of the sensor located in the current building
+echo "ID du capteur correspondant : $idCap"
 
-echo "La température est de $temp°C"
-echo "L'humidité est de $hum g/m3"
+sujet=$(echo "SELECT type FROM \`sae23\`.\`capteur\` JOIN \`sae23\`.\`batiment\` ON \`capteur\`.\`id-batiment\`=\`batiment\`.\`id-batiment\` WHERE \`batiment\`.\`nom\`=\"$bat\" LIMIT 0,1 ;" | /opt/lampp/bin/mysql -h localhost -u sarrat -ppassroot | sed -n 2p) #finds what type of measures are made by the sensor (e.g. : temperature, humidity...)
+echo "La mesure relevée est : $sujet"
 
-idBat=$(echo "SELECT \`id-batiment\` FROM \`sae23\`.\`batiment\` LIMIT $i,1;" | /opt/lampp/bin/mysql -h localhost -u sarrat -ppassroot | sed -n 2p)
-echo "ID du bâtiment traité : $idBat"
+date=$(date +%F) #current date on YYYY-MM-DD format
+heure=$(date +%X) #current hour on HH:MM:SS format
+valeur=$(echo $mesure | jq '.[0].'$sujet) #extracts the value from the JSON payload according to what type of sensor measured it
 
-idCap=$(echo "SELECT \`id-capteur\` FROM \`sae23\`.\`capteur\` WHERE \`id-batiment\`=\"$idBat\" LIMIT 0,1;" | /opt/lampp/bin/mysql -h localhost -u sarrat -ppassroot | sed -n 2p)
-echo "ID du capteur traité : $idCap"
+echo "La valeur relevée est $valeur"
 
-echo "INSERT INTO sae23.mesure (\`date\`, \`heure\`, \`valeur\`, \`id-capteur\`) VALUES ('$date', '$heure', '$temp', '$idCap');" | /opt/lampp/bin/mysql -h localhost -u sarrat -ppassroot
+echo "INSERT INTO sae23.mesure (\`date\`, \`heure\`, \`valeur\`, \`id-capteur\`) VALUES ('$date', '$heure', '$valeur', '$idCap');" | /opt/lampp/bin/mysql -h localhost -u sarrat -ppassroot #inserts the complete measure into the "mesure" table
 
 done
 
