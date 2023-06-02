@@ -6,10 +6,9 @@
 		<link rel="stylesheet" type="text/css" href="./styles/style.css" />
 	</head>
 	<body>
-		<p>Site dynamique de la SAE23 !</p>
+		<p>Page de la gestion de projet</p>
 		</br>
-		<p><a href="login_gestionnaire.php">Connexion gestionnaire</a></p>
+		<p><a href="index.php">Retour a l'accueil</a></p>
 		</br>
-		<p><a href="login_admin.php">Connexion administrateur</a></p>
 	</body>
 </html>

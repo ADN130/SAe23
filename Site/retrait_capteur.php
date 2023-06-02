@@ -13,7 +13,7 @@
 			</div>
 			<?php
 				session_start();
-				if ($_SESSION["auth"]!=TRUE)
+				if ($_SESSION["login"]!="admin")
 						header("Location:login_error.php");
 				include ("mysql.php");
 				$requete = "SELECT nom FROM `capteur` ORDER BY `nom` DESC";

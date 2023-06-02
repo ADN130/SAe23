@@ -18,7 +18,7 @@ a:visited{
 }
 
 header{
-	position: fixed; 													/* Le header reste visible tout le long de la page */
+  position: fixed; 													/* Le header reste visible tout le long de la page */
   top: 0; 
   width: 100%; 
   height: 80px;
@@ -187,6 +187,7 @@ form .txt_field{
   border: none;
   background: none;
   outline: none;
+  color: white;
 }
 .txt_field label{
   position: absolute;
@@ -216,6 +217,52 @@ form .txt_field{
 .txt_field input:focus ~ span::before,
 .txt_field input:valid ~ span::before{
   width: 100%;
+}
+
+form .txt_field_login{
+  position: relative;
+  border-bottom: 2px solid #adadad;
+  margin: 40px 0;
+}
+.txt_field_login input{
+  width: 100%;
+  padding: 0 5px;
+  height: 40px;
+  font-size: 16px;
+  border: none;
+  background: none;
+  outline: none;
+  color: black;
+}
+.txt_field_login label{
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  color: #adadad;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+  transition: .5s;
+}
+.txt_field_login span::before{
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #2691d9;
+  transition: .5s;
+}
+.txt_field_login input:focus ~ label,
+.txt_field_login input:valid ~ label{
+  top: -5px;
+  color: #2691d9;
+}
+.txt_field_login input:focus ~ span::before,
+.txt_field_login input:valid ~ span::before{
+  width: 100%;
+
 }
 .pass{
   margin: -5px 0 20px 5px;
@@ -253,6 +300,17 @@ input[type="submit"]:hover{
 }
 .signup_link a:hover{
   text-decoration: underline;
+}
+
+.mult_choice label{
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  color: #adadad;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+  transition: .5s;
 }
 
 /* RWD pour très faibles résolutions (0-261px) */

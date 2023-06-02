@@ -14,12 +14,12 @@
     	<div class="center">
       	<h1>Acces au compte administrateur</h1>
       	<form action="login_admin_script.php" method="post" enctype="multipart/form-data">
-        	<div class="txt_field">
+        	<div class="txt_field_login">
           	<input type="username" name="login" id="login" />
           	<span></span>
           	<label for="login">Nom de compte</label>
         	</div>
-        	<div class="txt_field">
+        	<div class="txt_field_login">
           	<input type="password" name="mdp" id="mdp" />
           	<span></span>
           	<label for="mdp">Mot de passe</label>
