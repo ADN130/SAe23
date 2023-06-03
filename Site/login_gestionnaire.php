@@ -12,7 +12,7 @@
 	</head>
 	<body>
     	<div class="center">
-      		<h1>Acces aux comptes gestionnaire</h1>
+      		<h1>Acces aux comptes gestionnaires</h1>
       		<form action="login_gestionnaire_script.php" method="post" enctype="multipart/form-data">
         		<div class="txt_field_login">
           		<input type="username" name="login" id="login" />

@@ -34,8 +34,8 @@
 				$gui='"';
 				$req_id="SELECT `id-batiment` FROM `batiment` WHERE login={$gui}{$utilisateur}{$gui}"; 
 				$id=mysqli_query($id_bd, $req_id);
-				$raw=mysqli_fetch_array($id);
-				$query="SELECT * FROM `mesure` JOIN `capteur` ON `mesure`.`id-capteur` = `capteur`.`id-capteur` WHERE `capteur`.`id-batiment`={$gui}{$raw[0]}{$gui}";
+				$id=mysqli_fetch_array($id);
+				$query="SELECT * FROM `mesure` JOIN `capteur` ON `mesure`.`id-capteur` = `capteur`.`id-capteur` WHERE `capteur`.`id-batiment`={$gui}{$id[0]}{$gui}";
 				$result = mysqli_query($id_bd, $query);
 				while($row = mysqli_fetch_assoc($result)) {
                 echo "<tr>

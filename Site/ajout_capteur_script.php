@@ -7,11 +7,7 @@
 
 	include ("mysql.php");	
 
-	$id="$id";
-	$nom="$nom";
-	$type="$type";
-	$idBatiment="idBatiment";
-	$virg=',';
+	$virg=','; 
 	$gui='"';
 	$i="({$gui}{$id}{$gui}{$virg} {$gui}{$nom}{$gui}{$virg} {$gui}{$type}{$gui}{$virg} {$gui}{$idBatiment}{$gui})";
 
