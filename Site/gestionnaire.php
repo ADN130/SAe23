@@ -37,6 +37,38 @@
 				$id=mysqli_fetch_array($id);
 				$query="SELECT * FROM `mesure` JOIN `capteur` ON `mesure`.`id-capteur` = `capteur`.`id-capteur` WHERE `capteur`.`id-batiment`={$gui}{$id[0]}{$gui}";
 				$result = mysqli_query($id_bd, $query);
+
+				$nbCapteurs="SELECT COUNT(`id-capteur`) FROM `sae23`.`capteur` JOIN `sae23`.`batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`nom`={$gui}{$utilisateur}{$gui}";
+				$nbCapteurs=mysqli_query($id_bd, $nbCapteurs);
+				$nbCapteurs=mysqli_fetch_array($nbCapteurs);
+				$nbCapteurs=$nbCapteurs[0];
+
+
+				for ($i=0; $i < $nbCapteurs; $i++) {
+					$idCapteur="SELECT `id-capteur` FROM `capteur` JOIN `sae23`.`batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`nom`={$gui}{$utilisateur}{$gui} LIMIT {$i},1";
+					$idCapteur=mysqli_query($id_bd, $idCapteur);
+					$typeCapteur="SELECT `type` FROM `capteur` JOIN `sae23`.`batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`nom`={$gui}{$utilisateur}{$gui} LIMIT {$i},1";
+					$typeCapteur=mysqli_query($id_bd, $typeCapteur);
+					$avg="SELECT AVG(`valeur`) FROM `sae23`.`mesure` WHERE `id-capteur` = {$gui}${idCapteur}{$gui}";
+					$avg=mysqli_query($id_bd, $avg);
+					$min="SELECT MIN(`valeur`) FROM `sae23`.`mesure` WHERE `id-capteur` = {$gui}${idCapteur}{$gui}";
+					$min=mysqli_query($id_bd, $min);
+					$max="SELECT MAX(`valeur`) FROM `sae23`.`mesure` WHERE `id-capteur` = {$gui}${idCapteur}{$gui}";
+					$max=mysqli_query($id_bd, $max);
+
+					echo "<tr><td>Moyenne de {$typeCapteur}</td>td>{$avg}</td></tr>
+						  <tr><td>Minimum de {$typeCapteur}</td>td>{$min}</td></tr>
+					 	  <tr><td>Maximum de {$typeCapteur}</td>td>{$max}</td></tr>";
+				}
+				
+				echo "<tr>
+				          <td>ID Mesure</td>
+				          <td>Date</td>
+				          <td>Heure</td>
+				          <td>Valeur</td>
+				          <td>ID Capteur</td>
+			             </tr>";
+
 				while($row = mysqli_fetch_assoc($result)) {
                 echo "<tr>
                     <td>" . $row["id-mesure"] . "</td>

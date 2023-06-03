@@ -31,6 +31,8 @@
 			<p><a href="retrait_batiment.php">Retirer un batiment</a></p></br>
 			<p><a href="ajout_capteur.php">Ajouter un capteur</a></p></br>
 			<p><a href="retrait_capteur.php">Retirer un capteur</a></p></br>
+			<p><a href="ajout_rapide.php">Ajout rapide</a></p></br>
+			<p><a href="retrait_rapide.php">Retrait rapide</a></p></br>
 			<p><a href="gestionnaire.php">Page gestionnaire</a></p></br>
 		</section>
 		<footer>
