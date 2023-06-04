@@ -13,38 +13,63 @@
 		<table>
 		<?php
 			include ("mysql.php");
-			$nbBatiments=mysqli_query($id_bd, "SELECT COUNT(`id-batiment`) FROM `sae23`.`batiment`");
+
+			$nbBatiments=mysqli_query($id_bd, "SELECT COUNT(`id-batiment`) FROM `batiment`");
 			$nbBatiments=mysqli_fetch_array($nbBatiments);
 			$nbBatiments=$nbBatiments[0];
+
 			$gui='"';
 
 			for ($i=0; $i < $nbBatiments; $i++){
 
-				$bat=mysqli_query($id_bd, "SELECT nom FROM `sae23`.`batiment` LIMIT $i,1;");
-				$raw=mysqli_fetch_array($bat);
-				$query="SELECT * FROM `mesure` JOIN `sae23`.`capteur` ON `mesure`.`id-capteur` = `capteur`.`id-capteur` JOIN `sae23`.`batiment` ON `capteur`.`id-batiment` = `batiment`.`id-batiment` WHERE `batiment`.`nom`={$gui}{$raw[0]}{$gui} ORDER BY `id-mesure` DESC LIMIT 1";
-				$result = mysqli_query($id_bd, $query);
+				$idBat="SELECT `id-batiment` FROM `batiment` LIMIT ${i},1";
+				$idBat=mysqli_query($id_bd, $idBat);
+				$idBat=mysqli_fetch_array($idBat);
+				$idBat=$idBat[0];
 
-				while($row = mysqli_fetch_assoc($result)){
+				$nbCapteurs="SELECT COUNT(`id-capteur`) FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui}";
+				$nbCapteurs=mysqli_query($id_bd, $nbCapteurs);
+				$nbCapteurs=mysqli_fetch_array($nbCapteurs);
+				$nbCapteurs=$nbCapteurs[0];
 
-		            echo "
-						  <tr><td>Derniere mesure du batiment {$raw[0]}</td></tr>
+				for ($y=0; $y < $nbCapteurs; $y++){
 
-						  <tr>
-				          <td>ID Mesure</td>
-				          <td>Date</td>
-				          <td>Heure</td>
-				          <td>Valeur</td>
-				          <td>ID Capteur</td>
-			             </tr>
+					$idCapteur="SELECT `id-capteur` FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui} LIMIT {$y},1";
+					$idCapteur=mysqli_query($id_bd, $idCapteur);
+					$idCapteur=mysqli_fetch_array($idCapteur);
+					$idCapteur=$idCapteur[0];
 
-						  <tr>
-		                  <td>" . $row["id-mesure"] . "</td>
-		                  <td>" . $row["date"] . "</td>
-		                  <td>" . $row["heure"] . "</td>
-		                  <td>" . $row["valeur"] . "</td>
-						  <td>" . $row["id-capteur"] . "</td>
-		                  </tr>";
+					$typeCapteur="SELECT `type` FROM `capteur` WHERE `id-capteur`={$gui}{$idCapteur}{$gui}";
+					$typeCapteur=mysqli_query($id_bd, $typeCapteur);
+					$typeCapteur=mysqli_fetch_array($typeCapteur);
+					$typeCapteur=$typeCapteur[0];
+
+					$query="SELECT * FROM `mesure` JOIN `capteur` ON `mesure`.`id-capteur` = `capteur`.`id-capteur` WHERE `capteur`.`id-capteur`={$gui}{$idCapteur}{$gui} ORDER BY `id-mesure` DESC LIMIT 1";
+					$result = mysqli_query($id_bd, $query);
+
+					while($row = mysqli_fetch_assoc($result)){
+
+				        echo "
+							  <tr><td>Derniere mesure du batiment {$idBat}</td></tr>
+
+							  <tr>
+						      <td>ID Mesure</td>
+						      <td>Date</td>
+						      <td>Heure</td>
+						      <td>Valeur</td>
+						      <td>ID Capteur</td>
+							  <td>Type de Capteur</td>
+					          </tr>
+
+							  <tr>
+				              <td>" . $row["id-mesure"] . "</td>
+				              <td>" . $row["date"] . "</td>
+				              <td>" . $row["heure"] . "</td>
+				              <td>" . $row["valeur"] . "</td>
+							  <td>" . $row["id-capteur"] . "</td>
+							  <td>" . $typeCapteur . "</td>
+				              </tr>";
+					}
 				}
 			}
 

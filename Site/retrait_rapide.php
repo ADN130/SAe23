@@ -17,8 +17,8 @@
 						header("Location:login_error.php");
 
 				include ("mysql.php");
-
-				$requete = "SELECT nom FROM `batiment` ORDER BY `nom` DESC";
+				$gui='"';
+				$requete = "SELECT `id-batiment` AS {$gui}nom{$gui} FROM `batiment` ORDER BY `id-batiment` DESC";
 				$resultat = mysqli_query($id_bd, $requete)
 					or die("Execution de la requete impossible : $requete");
 				mysqli_close($id_bd);
@@ -31,7 +31,7 @@
 				while($ligne=mysqli_fetch_assoc($resultat))
 				{
 					extract($ligne);
-					echo "<option value=\"$nom\">$nom</option>";
+					echo "<option value=\"{$nom}\">{$nom}</option>";
 				}
 
 				echo '</select';

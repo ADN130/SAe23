@@ -8,11 +8,11 @@
 
 	for ($i=0; $i < $nbRetraits; $i++){
 
-	$req="DELETE FROM `sae23`.`batiment` WHERE nom={$gui}{$retraitArray[$i]}{$gui}";
+	$req="DELETE `capteur` FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment` = `batiment`.`id-batiment` WHERE `batiment`.`id-batiment` = {$gui}{$retraitArray[$i]}{$gui}";
 	mysqli_query($id_bd, $req)
 		or die("Execution de l ajout impossible : $req");
 
-	$req="DELETE `capteur` FROM `sae23`.`capteur` JOIN `sae23`.`batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE batiment.nom={$gui}{$retraitArray[$i]}{$gui}";
+	$req="DELETE FROM `batiment` WHERE `id-batiment`={$gui}{$retraitArray[$i]}{$gui}";
 	mysqli_query($id_bd, $req)
 		or die("Execution de l ajout impossible : $req");
 	}
