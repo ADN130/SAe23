@@ -42,6 +42,11 @@ avg_temp=$(echo "SELECT AVG(\`valeur\`) FROM sae23.mesure WHERE \`id-capteur\` =
     min_temp=$(echo "SELECT MIN(\`valeur\`) FROM sae23.mesure WHERE \`id-capteur\` = '$idCap';" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85 | awk 'NR==2{print $1}')
     max_temp=$(echo "SELECT MAX(\`valeur\`) FROM sae23.mesure WHERE \`id-capteur\` = '$idCap';" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85 | awk 'NR==2{print $1}')
 
+#password encryption 
+
+chif_ad=$(echo "UPDATE \`sae23\`.\`administration\` SET mdp = CONCAT('md5:', MD5(mdp));" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85)
+chif_bat=$(echo "UPDATE \`sae23\`.\`batiment\` SET mdp = CONCAT('md5:', MD5(mdp));" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85)
+
 
 done
 done
