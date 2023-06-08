@@ -13,11 +13,11 @@
 			</div>
 			<?php
 				session_start();
-				if ($_SESSION["login"]!="admin")
+				if ($_SESSION["login"] != "admin")
 						header("Location:login_error.php");
 
-				include ("mysql.php");
-				$gui='"';
+				include("mysql.php");
+				$gui = '"';
 				$requete = "SELECT `id-batiment` AS {$gui}nom{$gui} FROM `batiment` ORDER BY `id-batiment` DESC";
 				$resultat = mysqli_query($id_bd, $requete)
 					or die("Execution de la requete impossible : $requete");
@@ -25,16 +25,15 @@
 
 				echo '<form action="retrait_rapide_script.php" method="post" enctype="multipart/form-data">';
 				echo '<div class="mult_choice">
-					<label for="nom">Batiments retirables (CTRL + clic pour séléctionner plusieurs)</label>
+					<label for="nom">Batiments retirables (CTRL + clic pour sélectionner plusieurs)</label>
 					<select name="nom[]" multiple="multiple">';
 
-				while($ligne=mysqli_fetch_assoc($resultat))
-				{
-					extract($ligne);
+				while ($ligne = mysqli_fetch_assoc($resultat)) {
+					$nom = mysqli_real_escape_string($id_bd, $ligne["nom"]);
 					echo "<option value=\"{$nom}\">{$nom}</option>";
 				}
 
-				echo '</select';
+				echo '</select>';
 				echo '</div>';
 			?>
 		    	<input type="submit" value="Valider">

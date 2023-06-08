@@ -13,21 +13,23 @@
 			</div>
 			<?php
 				session_start();
-				if ($_SESSION["login"]!="admin")
-						header("Location:login_error.php");
+				if ($_SESSION["login"] != "admin") {
+					header("Location: login_error.php");
+					exit();
+				}
 			?>
 		</section>
 		<section>
 			<br />
 			<form action="ajout_rapide_script.php" method="post" enctype="multipart/form-data">
 		    	<div class="txt_field">
-				  	<input type="text" name="nom" id="nom" />
+				  	<input type="text" name="nom" id="nom" required />
 				  	<span></span>
-				  	<label for="nom">Nom du batiment</label>
+				  	<label for="nom">Nom du bâtiment</label>
 		    	</div>
 		    	<div class="mult_choice">
-					<label for="type">Types de capteurs (CTRL + clic pour séléctionner plusieurs)</label>
-				  	<select name="type[]" multiple="multiple">
+					<label for="type">Types de capteurs (CTRL + clic pour sélectionner plusieurs)</label>
+				  	<select name="type[]" multiple="multiple" required>
 						<option value="temperature">Temperature</option>
 						<option value="humidity">Humidite</option>
 						<option value="activity">Activite</option>

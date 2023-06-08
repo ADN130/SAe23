@@ -3,48 +3,38 @@
 	include ("mysql.php");
 
 	$typeArray = $_POST['type'];
+	$idBatiment = mysqli_real_escape_string($id_bd, $_POST["nom"]);
 
-	$idBatiment=$_POST["nom"];
-	#$idBatiment=substr($idBatiment, 1);
+	$nomBatiment = "Batiment" . $idBatiment;
+	$loginBatiment = "gest" . $idBatiment;
+	$mdpBatiment = "pass" . $idBatiment;
 
-	$nomBatiment="Batiment$idBatiment";
-
-	$loginBatiment="gest$idBatiment";
-
-	$mdpBatiment="pass$idBatiment";
-
-	$nbCapteurs=mysqli_query($id_bd, "SELECT COUNT(`id-capteur`) FROM `sae23`.`capteur`");
-	$nbCapteurs=mysqli_fetch_array($nbCapteurs);
-	$nbCapteurs=$nbCapteurs[0];
+	$nbCapteurs = mysqli_query($id_bd, "SELECT COUNT(`id-capteur`) FROM `sae23`.`capteur`");
+	$nbCapteurs = mysqli_fetch_array($nbCapteurs);
+	$nbCapteurs = $nbCapteurs[0];
 	$nbCapteurs++;
 
-	$nbTypes=count($typeArray);
+	$nbTypes = count($typeArray);
+	$idCapteur = $nbCapteurs;
 
-	$idCapteur=$nbCapteurs;
-	
-	$virg=','; 
-	$gui='"';
+	$virg = ','; 
+	$gui = '"';
 
-
-	for ($i=0; $i < $nbTypes; $i++){
-
-		$nomCapteur="CAPT$typeArray[$i]$idBatiment";
-		$valeurs="({$gui}{$gui}{$virg} {$gui}{$nomCapteur}{$gui}{$virg} {$gui}{$typeArray[$i]}{$gui}{$virg} {$gui}{$idBatiment}{$gui})";
-		$req="INSERT INTO `capteur` (`id-capteur`, `nom`, `type`, `id-batiment`) VALUES {$valeurs}";
-		mysqli_query($id_bd, $req)
-			or die("Execution de l ajout impossible : $req");
+	for ($i = 0; $i < $nbTypes; $i++){
+		$type = mysqli_real_escape_string($id_bd, $typeArray[$i]);
+		$nomCapteur = "CAPT" . $typeArray[$i] . $idBatiment;
+		$valeurs = "({$gui}{$gui}{$virg} {$gui}{$nomCapteur}{$gui}{$virg} {$gui}{$type}{$gui}{$virg} {$gui}{$idBatiment}{$gui})";
+		$req = "INSERT INTO `capteur` (`id-capteur`, `nom`, `type`, `id-batiment`) VALUES {$valeurs}";
+		mysqli_query($id_bd, $req) or die("Execution de l'ajout impossible : $req");
 		$nbCapteurs++;
-		$idCapteur=$nbCapteurs;
-		$nomCapteur="capt$nbCapteurs";
-
+		$idCapteur = $nbCapteurs;
+		$nomCapteur = "capt$nbCapteurs";
 	}
 
-	$valeurs="({$gui}{$idBatiment}{$gui}{$virg} {$gui}{$nomBatiment}{$gui}{$virg} {$gui}{$loginBatiment}{$gui}{$virg} {$gui}{$mdpBatiment}{$gui})";
-	$req="INSERT INTO `batiment` (`id-batiment`, `nom`, `login`, `mdp`) VALUES {$valeurs}";
+	$valeurs = "({$gui}{$idBatiment}{$gui}{$virg} {$gui}{$nomBatiment}{$gui}{$virg} {$gui}{$loginBatiment}{$gui}{$virg} {$gui}{$mdpBatiment}{$gui})";
+	$req = "INSERT INTO `batiment` (`id-batiment`, `nom`, `login`, `mdp`) VALUES {$valeurs}";
 
-	mysqli_query($id_bd, $req)
-		or die("Execution de l ajout impossible : $req");
+	mysqli_query($id_bd, $req) or die("Execution de l'ajout impossible : $req");
 	mysqli_close($id_bd);
-	echo "<script type='text/javascript'>document.location.replace('admin.php');</script>"; // Redirection on successful addition											
+	echo "<script type='text/javascript'>document.location.replace('admin.php');</script>"; // Redirection on successful addition
 ?>
-

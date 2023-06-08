@@ -1,7 +1,7 @@
 <?php
 /* connection to database script */
 
-  $id_bd = mysqli_connect("127.0.0.1","sarrat","passroot","sae23") // ("host","username","password","database")
+  $id_bd = mysqli_connect("localhost","bensaid","adnane85","sae23") // ("host","username","password","database")
     or die("Connexion au serveur et/ou à la base de données impossible");
 
   /* character encoding setting */

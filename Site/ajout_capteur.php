@@ -13,25 +13,27 @@
 			</div>
 			<?php
 				session_start();
-				if ($_SESSION["login"]!="admin")
-						header("Location:login_error.php");
+				if ($_SESSION["login"] != "admin") {
+					header("Location: login_error.php");
+					exit();
+				}
 			?>
 		</section>
 		<section>
 			<br />
 			<form action="ajout_capteur_script.php" method="post" enctype="multipart/form-data">
 		    	<div class="txt_field">
-				  	<input type="number" name="id" id="id" />
+				  	<input type="number" name="id" id="id" required />
 				  	<span></span>
 				  	<label for="id">ID du capteur</label>
 		    	</div>
 		    	<div class="txt_field">
-				  	<input type="text" name="nom" id="nom" />
+				  	<input type="text" name="nom" id="nom" required />
 				  	<span></span>
 				  	<label for="nom">Nom du capteur</label>
 		    	</div>
 		    	<div class="mult_choice">
-				  	<select name="type">
+				  	<select name="type" required>
 						<option value="temperature">Temperature</option>
 						<option value="humidity">Humidite</option>
 						<option value="activity">Activite</option>
@@ -57,3 +59,4 @@
 		</footer>
 	</body>
 </html>
+					

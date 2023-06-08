@@ -2,23 +2,21 @@
 	session_start();
 	include ("mysql.php");	
 
-	$gui='"';
+	$gui = '"';
 	$retraitArray = $_POST['nom'];
-	$nbRetraits=count($retraitArray);
+	$nbRetraits = count($retraitArray);
 
-	for ($i=0; $i < $nbRetraits; $i++){
+	for ($i = 0; $i < $nbRetraits; $i++) {
+		$retraitArray[$i] = mysqli_real_escape_string($id_bd, $retraitArray[$i]);
 
-	$req="DELETE `capteur` FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment` = `batiment`.`id-batiment` WHERE `batiment`.`id-batiment` = {$gui}{$retraitArray[$i]}{$gui}";
-	mysqli_query($id_bd, $req)
-		or die("Execution de l ajout impossible : $req");
+		$req = "DELETE `capteur` FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment` = `batiment`.`id-batiment` WHERE `batiment`.`id-batiment` = {$gui}{$retraitArray[$i]}{$gui}";
+		mysqli_query($id_bd, $req) or die("Execution de la suppression impossible : $req");
 
-	$req="DELETE FROM `batiment` WHERE `id-batiment`={$gui}{$retraitArray[$i]}{$gui}";
-	mysqli_query($id_bd, $req)
-		or die("Execution de l ajout impossible : $req");
+		$req = "DELETE FROM `batiment` WHERE `id-batiment` = {$gui}{$retraitArray[$i]}{$gui}";
+		mysqli_query($id_bd, $req) or die("Execution de la suppression impossible : $req");
 	}
 
 	mysqli_close($id_bd);
 
-	echo "<script type='text/javascript'>document.location.replace('admin.php');</script>"; // Redirection on successful addition											
+	echo "<script type='text/javascript'>document.location.replace('admin.php');</script>"; // Redirection on successful deletion
 ?>
-
