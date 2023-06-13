@@ -1,15 +1,6 @@
 <?php
 	// Beginning of the session
 	session_start();
-
-	// Check if form is submitted
-	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		// Get a no sql form input values
-		$login = mysqli_real_escape_string($id_bd, $_POST["login"]);
-		$password = mysqli_real_escape_string($id_bd, $_POST["mdp"]);
-
-		
-	}
 ?>
 
 <!DOCTYPE html>
@@ -17,11 +8,11 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Administration</title>
-		<link rel="stylesheet" type="text/css" href="./styles/style.css" />
+		<link rel="stylesheet" type="text/css" href="../styles/style.css" />
 	</head>
 	<body>
     	<div class="center">
-      	<h1>Accès au compte administrateur</h1>
+      	<h1>Acces au compte administrateur</h1>
       	<form action="login_admin_script.php" method="post" enctype="multipart/form-data">
         	<div class="txt_field_login">
           	<input type="username" name="login" id="login" />

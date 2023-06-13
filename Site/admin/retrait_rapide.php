@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Administration</title>
-		<link rel="stylesheet" type="text/css" href="./styles/style.css" />
+		<link rel="stylesheet" type="text/css" href="../styles/style.css" />
 	</head>
 	<body>
 		<section>
@@ -13,12 +13,12 @@
 			</div>
 			<?php
 				session_start();
-				if ($_SESSION["login"] != "admin")
-						header("Location:login_error.php");
+				if ($_SESSION["login"]!="admin")
+						header("Location:../login_error.php");
 
-				include("mysql.php");
-				$gui = '"';
-				$requete = "SELECT `id-batiment` AS {$gui}nom{$gui} FROM `batiment` ORDER BY `id-batiment` DESC";
+				include ("../mysql.php");
+				$gui='"';
+				$requete = "SELECT `id-batiment` AS {$gui}id{$gui} FROM `batiment` ORDER BY `id-batiment` DESC";
 				$resultat = mysqli_query($id_bd, $requete)
 					or die("Execution de la requete impossible : $requete");
 				mysqli_close($id_bd);
@@ -28,13 +28,15 @@
 					<label for="nom">Batiments retirables (CTRL + clic pour sélectionner plusieurs)</label>
 					<select name="nom[]" multiple="multiple">';
 
-				while ($ligne = mysqli_fetch_assoc($resultat)) {
-					$nom = mysqli_real_escape_string($id_bd, $ligne["nom"]);
-					echo "<option value=\"{$nom}\">{$nom}</option>";
+				while($ligne=mysqli_fetch_assoc($resultat))
+				{
+					extract($ligne);
+					echo "<option value=\"{$id}\">{$id}</option>";
 				}
 
-				echo '</select>';
+				echo '</select';
 				echo '</div>';
+				echo '</form>';
 			?>
 		    	<input type="submit" value="Valider">
 			</form>

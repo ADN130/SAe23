@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Administration</title>
-		<link rel="stylesheet" type="text/css" href="./styles/style.css" />
+		<link rel="stylesheet" type="text/css" href="../styles/style.css" />
 	</head>
 	<body>
 		<section>
@@ -13,23 +13,21 @@
 			</div>
 			<?php
 				session_start();
-				if ($_SESSION["login"] != "admin") {
-					header("Location: login_error.php");
-					exit();
-				}
+				if ($_SESSION["login"]!="admin")
+						header("Location:../login_error.php");
 			?>
 		</section>
 		<section>
 			<br />
 			<form action="ajout_rapide_script.php" method="post" enctype="multipart/form-data">
 		    	<div class="txt_field">
-				  	<input type="text" name="nom" id="nom" required />
+				  	<input type="text" name="nom" id="nom" />
 				  	<span></span>
-				  	<label for="nom">Nom du bâtiment</label>
+				  	<label for="nom">Nom du batiment</label>
 		    	</div>
 		    	<div class="mult_choice">
-					<label for="type">Types de capteurs (CTRL + clic pour sélectionner plusieurs)</label>
-				  	<select name="type[]" multiple="multiple" required>
+					<label for="type">Types de capteurs (CTRL + clic pour séléctionner plusieurs)</label>
+				  	<select name="type[]" multiple="multiple">
 						<option value="temperature">Temperature</option>
 						<option value="humidity">Humidite</option>
 						<option value="activity">Activite</option>
