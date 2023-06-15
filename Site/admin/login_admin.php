@@ -13,7 +13,7 @@
 	<body>
     	<div class="center">
       	<h1>Acces au compte administrateur</h1>
-      	<form action="login_admin_script.php" method="post" enctype="multipart/form-data">
+      	<form action="login_admin_script.php" method="post" enctype="multipart/form-data"> <!--form used to connect to the administrator account-->
         	<div class="txt_field_login">
           	<input type="username" name="login" id="login" />
           	<span></span>

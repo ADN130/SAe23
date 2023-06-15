@@ -9,7 +9,7 @@
 	// Authentication script using "administration" table
 
 	if(empty($motdep))
-		header("Location:login_error.php");
+		header("Location:../login_error.php");
 	else
      {
 		/* Access to database */
@@ -22,13 +22,14 @@
 
 		$ligne1 = mysqli_fetch_row($user);
 		$ligne2 = mysqli_fetch_row($pass);
+
 		if ($utilisateur==$ligne1[0]) 
 		 {
 		 	if ($motdep==$ligne2[0])
 		 		{
 					$_SESSION["auth"]="admin";		
             		mysqli_close($id_bd);
-					echo "<script type='text/javascript'>document.location.replace('admin.php');</script>"; // Redirection on successful login
+					echo "<script type='text/javascript'>document.location.replace('admin.php');</script>"; // redirection on successful login
 		 		}
 		 	else
 		    	{
@@ -36,7 +37,7 @@
             		session_destroy();  
             		unset($_SESSION); 
             		mysqli_close($id_bd);
-            		echo "<script type='text/javascript'>document.location.replace('../login_error.php');</script>"; // Redirection on failed login
+            		echo "<script type='text/javascript'>document.location.replace('../login_error.php');</script>"; // redirection on failed login
 				}
 		 }
 		else
@@ -45,7 +46,7 @@
             session_destroy();  
             unset($_SESSION); 
             mysqli_close($id_bd);
-            echo "<script type='text/javascript'>document.location.replace('../login_error.php');</script>"; // Redirection on failed login
+            echo "<script type='text/javascript'>document.location.replace('../login_error.php');</script>"; // redirection on failed login
 		 }
      } 
  ?>

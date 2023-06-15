@@ -14,7 +14,7 @@
 			<?php
 				session_start();
 				if ($_SESSION["auth"]!=TRUE)
-						header("Location:login_error.php");
+						header("Location:../login_error.php"); #if session login is different from admin then redirects to login error page
 
 				include ("../mysql.php");
 
@@ -29,58 +29,20 @@
 
 				if ($_SESSION["login"]!="admin"){
 
-				#if (isset($_SESSION['nom'])){
-				
-				#else
+					$idBat="SELECT `id-batiment` FROM `batiment` WHERE `login`={$gui}{$utilisateur}{$gui}";
+					$idBat=mysqli_query($id_bd, $idBat);
+					$idBat=mysqli_fetch_array($idBat);
+					$idBat=$idBat[0];
 
-				#$_SESSION['nom']
-
-				#}
-
-				$requete = "SELECT `type` FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `login`={$gui}{$utilisateur}{$gui}";
-				$resultat = mysqli_query($id_bd, $requete)
-					or die("Execution de la requete impossible : $requete");
-
-				echo '<form action="gestionnaire_choix_capteurs.php" method="post" enctype="multipart/form-data">';
-				echo '<div class="mult_choice">
-					<label for="nom">Donnees a afficher (CTRL + clic pour sélectionner plusieurs)</label>
-					<select name="affich[]" multiple="multiple">';
-
-				while($ligne=mysqli_fetch_assoc($resultat))
-				{
-					extract($ligne);
-					echo "<option value=\"{$type}\">{$type}</option>";
-				}
-
-				echo '</select';
-				echo '</div>';
-				echo '</form>';
-				echo '<input type="submit" value="Valider">
-					  </form>';
-
-				$idBat="SELECT `id-batiment` FROM `batiment` WHERE `login`={$gui}{$utilisateur}{$gui}";
-				$idBat=mysqli_query($id_bd, $idBat);
-				$idBat=mysqli_fetch_array($idBat);
-				$idBat=$idBat[0];
-
-				$query="SELECT * FROM `mesure` JOIN `capteur` ON `mesure`.`id-capteur` = `capteur`.`id-capteur` JOIN `batiment` ON `capteur`.`id-batiment` = `batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui}";
-				$result = mysqli_query($id_bd, $query);
-				
-
-
-				$nbCapteurs="SELECT COUNT(`id-capteur`) FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui}";
-				$nbCapteurs=mysqli_query($id_bd, $nbCapteurs);
-				$nbCapteurs=mysqli_fetch_array($nbCapteurs);
-				$nbCapteurs=$nbCapteurs[0];
-
-				if (isset($_SESSION['affich'])){
+					$nbCapteurs="SELECT COUNT(`id-capteur`) FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui}";
+					$nbCapteurs=mysqli_query($id_bd, $nbCapteurs);
+					$nbCapteurs=mysqli_fetch_array($nbCapteurs);
+					$nbCapteurs=$nbCapteurs[0];
 
 					echo "<table>";
-					$afficheArray=$_SESSION['affich'];
-					$nbAffiches=count($afficheArray);
-					for ($i=0; $i < $nbAffiches; $i++) {
+					for ($i=0; $i < $nbCapteurs; $i++) {
 
-						$idCapteur="SELECT `id-capteur` FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui} AND `capteur`.`type` = {$gui}{$afficheArray[$i]}{$gui} LIMIT {$i},1";
+						$idCapteur="SELECT `id-capteur` FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui} LIMIT {$i},1";
 						$idCapteur=mysqli_query($id_bd, $idCapteur);
 						$idCapteur=mysqli_fetch_array($idCapteur);
 						$idCapteur=$idCapteur[0];
@@ -107,25 +69,58 @@
 
 						echo "<tr><td>Moyenne de {$typeCapteur}</td><td>{$avg}</td></tr>
 							  <tr><td>Minimum de {$typeCapteur}</td><td>{$min}</td></tr>
-						 	  <tr><td>Maximum de {$typeCapteur}</td><td>{$max}</td></tr>";
+							  <tr><td>Maximum de {$typeCapteur}</td><td>{$max}</td></tr>";
+					}
+
+					echo "</table>";
+					
+					echo "<table><tr>
+						      <td>ID Mesure</td>
+						      <td>Date</td>
+						      <td>Heure</td>
+						      <td>Valeur</td>
+						      <td>ID Capteur</td>
+					         </tr>";
+
+					$requete="SELECT * FROM `mesure` JOIN `capteur` ON `mesure`.`id-capteur` = `capteur`.`id-capteur` JOIN `batiment` ON `capteur`.`id-batiment` = `batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui}";
+					$resultat = mysqli_query($id_bd, $requete);
+
+					while($row = mysqli_fetch_assoc($resultat)){
+		            echo "<tr>
+		                  <td>" . $row["id-mesure"] . "</td>
+		                  <td>" . $row["date"] . "</td>
+		                  <td>" . $row["heure"] . "</td>
+		                  <td>" . $row["valeur"] . "</td>
+						  <td>" . $row["id-capteur"] . "</td>
+		            	  </tr>";
 					}
 				}
 
-
-				else{
+				if ($_SESSION["login"]=="admin"){
 
 					echo "<table>";
+
+					$nbCapteurs="SELECT COUNT(`id-capteur`) FROM `capteur`";
+					$nbCapteurs=mysqli_query($id_bd, $nbCapteurs);
+					$nbCapteurs=mysqli_fetch_array($nbCapteurs);
+					$nbCapteurs=$nbCapteurs[0];
+
 					for ($i=0; $i < $nbCapteurs; $i++) {
 
-						$idCapteur="SELECT `id-capteur` FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui} LIMIT {$i},1";
+						$idCapteur="SELECT `id-capteur` FROM `capteur` LIMIT {$i},1";
 						$idCapteur=mysqli_query($id_bd, $idCapteur);
 						$idCapteur=mysqli_fetch_array($idCapteur);
 						$idCapteur=$idCapteur[0];
 
-						$typeCapteur="SELECT `type` FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui} LIMIT {$i},1";
+						$typeCapteur="SELECT `type` FROM `capteur` LIMIT {$i},1";
 						$typeCapteur=mysqli_query($id_bd, $typeCapteur);
 						$typeCapteur=mysqli_fetch_array($typeCapteur);
 						$typeCapteur=$typeCapteur[0];
+
+						$salle="SELECT `batiment`.`id-batiment` FROM `batiment` JOIN `capteur` ON `capteur`.`id-batiment` = `batiment`.`id-batiment` WHERE `id-capteur`={$gui}${idCapteur}{$gui}";
+						$salle=mysqli_query($id_bd, $salle);
+						$salle=mysqli_fetch_array($salle);
+						$salle=$salle[0];
 
 						$avg="SELECT AVG(`valeur`) FROM `mesure` WHERE `id-capteur` = {$gui}${idCapteur}{$gui}";
 						$avg=mysqli_query($id_bd, $avg);
@@ -142,108 +137,35 @@
 						$max=mysqli_fetch_array($max);
 						$max=$max[0];
 
-						echo "<tr><td>Moyenne de {$typeCapteur}</td><td>{$avg}</td></tr>
-							  <tr><td>Minimum de {$typeCapteur}</td><td>{$min}</td></tr>
-						 	  <tr><td>Maximum de {$typeCapteur}</td><td>{$max}</td></tr>";
-					}
-				}
+						echo "<tr><td>Moyenne de {$typeCapteur} en salle {$salle}</td><td>{$avg}</td></tr>
+							  <tr><td>Minimum de {$typeCapteur} en salle {$salle}</td><td>{$min}</td></tr>
+							  <tr><td>Maximum de {$typeCapteur} en salle {$salle}</td><td>{$max}</td></tr>";
+				    }
 
-				echo "</table>";
-				
-				echo "<table><tr>
+					echo "</table>";
+
+					echo "<table><tr>
 				          <td>ID Mesure</td>
 				          <td>Date</td>
 				          <td>Heure</td>
 				          <td>Valeur</td>
 				          <td>ID Capteur</td>
-			             </tr>";
+			              </tr>";
 
-				while($row = mysqli_fetch_assoc($result)) {
-                echo "<tr>
-                      <td>" . $row["id-mesure"] . "</td>
-                      <td>" . $row["date"] . "</td>
-                      <td>" . $row["heure"] . "</td>
-                      <td>" . $row["valeur"] . "</td>
-					  <td>" . $row["id-capteur"] . "</td>
-                	  </tr>";
-				}
-				}
+					$requete="SELECT * FROM `mesure`";
+					$resultat = mysqli_query($id_bd, $requete);
 
-				if ($_SESSION["login"]=="admin")
-					{
-						echo "<table><tr>
-				          <td>ID Mesure</td>
-				          <td>Date</td>
-				          <td>Heure</td>
-				          <td>Valeur</td>
-				          <td>ID Capteur</td>
-			             </tr>";
-
-						$query="SELECT * FROM `mesure`";
-						$result = mysqli_query($id_bd, $query);
-
-						while($row = mysqli_fetch_assoc($result)) 
-							{
-						    echo "<tr>
-						        <td>" . $row["id-mesure"] . "</td>
-						        <td>" . $row["date"] . "</td>
-						        <td>" . $row["heure"] . "</td>
-						        <td>" . $row["valeur"] . "</td>
-								<td>" . $row["id-capteur"] . "</td>
-						    	</tr>";
-							}
-							echo "</table>";
-
-						$nbCapteurs="SELECT COUNT(`id-capteur`) FROM `capteur`";
-						$nbCapteurs=mysqli_query($id_bd, $nbCapteurs);
-						$nbCapteurs=mysqli_fetch_array($nbCapteurs);
-						$nbCapteurs=$nbCapteurs[0];
-					
-						echo "<table>";
-
-						for ($i=0; $i < $nbCapteurs; $i++) {
-
-							$idCapteur="SELECT `id-capteur` FROM `capteur` LIMIT {$i},1";
-							$idCapteur=mysqli_query($id_bd, $idCapteur);
-							$idCapteur=mysqli_fetch_array($idCapteur);
-							$idCapteur=$idCapteur[0];
-
-							$typeCapteur="SELECT `type` FROM `capteur` LIMIT {$i},1";
-							$typeCapteur=mysqli_query($id_bd, $typeCapteur);
-							$typeCapteur=mysqli_fetch_array($typeCapteur);
-							$typeCapteur=$typeCapteur[0];
-
-							$salle="SELECT `batiment`.`id-batiment` FROM `batiment` JOIN `capteur` ON `capteur`.`id-batiment` = `batiment`.`id-batiment` WHERE `id-capteur`={$gui}${idCapteur}{$gui}";
-							$salle=mysqli_query($id_bd, $salle);
-							$salle=mysqli_fetch_array($salle);
-							$salle=$salle[0];
-
-							$avg="SELECT AVG(`valeur`) FROM `mesure` WHERE `id-capteur` = {$gui}${idCapteur}{$gui}";
-							$avg=mysqli_query($id_bd, $avg);
-							$avg=mysqli_fetch_array($avg);
-							$avg=$avg[0];
-
-							$min="SELECT MIN(`valeur`) FROM `mesure` WHERE `id-capteur` = {$gui}${idCapteur}{$gui}";
-							$min=mysqli_query($id_bd, $min);
-							$min=mysqli_fetch_array($min);
-							$min=$min[0];
-
-							$max="SELECT MAX(`valeur`) FROM `mesure` WHERE `id-capteur` = {$gui}${idCapteur}{$gui}";
-							$max=mysqli_query($id_bd, $max);
-							$max=mysqli_fetch_array($max);
-							$max=$max[0];
-
-							echo "<tr><td>Moyenne de {$typeCapteur} en salle {$salle}</td><td>{$avg}</td></tr>
-								  <tr><td>Minimum de {$typeCapteur} en salle {$salle}</td><td>{$min}</td></tr>
-							 	  <tr><td>Maximum de {$typeCapteur} en salle {$salle}</td><td>{$max}</td></tr>";
-				    	}
-
-						echo "</table>";
-
+					while($row = mysqli_fetch_assoc($resultat)){
+						echo "<tr>
+						      <td>" . $row["id-mesure"] . "</td>
+						      <td>" . $row["date"] . "</td>
+						      <td>" . $row["heure"] . "</td>
+						      <td>" . $row["valeur"] . "</td>
+						      <td>" . $row["id-capteur"] . "</td>
+						      </tr>";
 					}
-		
-				
-
+					echo "</table>";
+				}
 				$id_bd->close();
 			?>
 		</section>

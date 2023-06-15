@@ -14,10 +14,10 @@
 			<?php
 				session_start();
 				if ($_SESSION["login"]!="admin")
-						header("Location:../login_error.php");
+						header("Location:../login_error.php"); #if session login is different from admin then redirects to login error page
 
 				include ("../mysql.php");
-				$gui='"';
+				$gui='"'; #quote needed in following variable in order not to break the line
 				$requete = "SELECT `id-batiment` AS {$gui}id{$gui} FROM `batiment` ORDER BY `id-batiment` DESC";
 				$resultat = mysqli_query($id_bd, $requete)
 					or die("Execution de la requete impossible : $requete");
@@ -31,7 +31,7 @@
 				while($ligne=mysqli_fetch_assoc($resultat))
 				{
 					extract($ligne);
-					echo "<option value=\"{$id}\">{$id}</option>";
+					echo "<option value=\"{$id}\">{$id}</option>"; #"id" variable has been extracted from the query
 				}
 
 				echo '</select';

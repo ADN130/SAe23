@@ -12,13 +12,12 @@
 				<hr/>
 			</div>
 			<?php
-				session_start();
+				session_start(); #beginning of the session
 				if ($_SESSION["login"]!="admin")
-						header("Location:login_error.php");
-				$motdep=$_SESSION["mdp"];
+						header("Location:../login_error.php"); #if session login is different from admin then redirects to login error page
 				$utilisateur=$_SESSION["login"];
 				/* Displaying database data  */
-				echo '<div class="tablo">';
+				echo '<div>';
 					echo "<p></br>Connecte en tant que <em>$utilisateur</em></p>";
 
 				echo '</div>';

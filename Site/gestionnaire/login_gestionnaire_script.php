@@ -11,7 +11,7 @@
 	// Authentication script using "batiment" table
 
 	if(empty($motdep))
-		header("Location:login_error.php");
+		header("Location:../login_error.php");
 	else
      {
 		/* Access to database */
@@ -31,7 +31,7 @@
 
 		if ($utilisateur==$user) 
 		 {
-		 	if ($motdep==$pass)
+		 	if ($motdep==$pass) #if user input matches with admin account credentials then connection is made
 		 		{
 					$_SESSION["auth"]=TRUE;		
             		mysqli_close($id_bd);

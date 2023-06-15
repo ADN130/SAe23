@@ -14,7 +14,7 @@
 			<?php
 				session_start();
 				if ($_SESSION["login"]!="admin")
-						header("Location:../login_error.php");
+						header("Location:../login_error.php"); #if session login is different from admin then redirects to login error page
 			?>
 		</section>
 		<section>
@@ -26,7 +26,7 @@
 				  	<label for="nom">Nom du batiment</label>
 		    	</div>
 		    	<div class="mult_choice">
-					<label for="type">Types de capteurs (CTRL + clic pour séléctionner plusieurs)</label>
+					<label for="type">Types de capteurs (CTRL + clic pour séléctionner plusieurs)</label> <!--list of sensors which can be selected-->
 				  	<select name="type[]" multiple="multiple">
 						<option value="temperature">Temperature</option>
 						<option value="humidity">Humidite</option>

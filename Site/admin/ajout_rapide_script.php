@@ -2,7 +2,7 @@
 	session_start();
 	include ("../mysql.php");
 
-	$typeArray =$_POST['type'];
+	$typeArray =$_POST['type']; #array that contains the sensors selected by the user in ajout_rapide form
 
 	$idBatiment=mysqli_real_escape_string($id_bd, $_POST["nom"]);
 
@@ -12,10 +12,16 @@
 
 	$mdpBatiment=mysqli_real_escape_string($id_bd, "pass$idBatiment");
 
-	$nbTypes=count($typeArray);
+	$nbTypes=count($typeArray); #number of sensors that were selected by the user
 	
-	$virg=','; 
-	$gui='"';
+	$virg=','; #coma
+	$gui='"'; #quote
+
+	$valeurs="({$gui}{$idBatiment}{$gui}{$virg} {$gui}{$nomBatiment}{$gui}{$virg} {$gui}{$loginBatiment}{$gui}{$virg} {$gui}{$mdpBatiment}{$gui})"; #result is e.g. ("E208", "BatimentE208", "gestE208", "passE208")
+	$req="INSERT INTO `batiment` (`id-batiment`, `nom`, `login`, `mdp`) VALUES {$valeurs}";
+
+	mysqli_query($id_bd, $req)
+		or die("Execution de l ajout impossible : $req");
 
 	for ($i=0; $i < $nbTypes; $i++){
 
@@ -26,12 +32,7 @@
 			or die("Execution de l ajout impossible : $req");
 	}
 
-	$valeurs="({$gui}{$idBatiment}{$gui}{$virg} {$gui}{$nomBatiment}{$gui}{$virg} {$gui}{$loginBatiment}{$gui}{$virg} {$gui}{$mdpBatiment}{$gui})";
-	$req="INSERT INTO `batiment` (`id-batiment`, `nom`, `login`, `mdp`) VALUES {$valeurs}";
-
-	mysqli_query($id_bd, $req)
-		or die("Execution de l ajout impossible : $req");
 	mysqli_close($id_bd);
-	echo "<script type='text/javascript'>document.location.replace('admin.php');</script>"; // Redirection on successful addition											
+	echo "<script type='text/javascript'>document.location.replace('admin.php');</script>"; // redirection on successful addition											
 ?>
 
