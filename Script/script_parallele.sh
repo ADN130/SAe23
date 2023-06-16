@@ -16,7 +16,7 @@ touch $bat.sh
 
 echo '#!/bin/bash
 
-mesure=$(mosquitto_sub -h 127.0.0.1 -t "Student/by-room/$bat/data" -C 1) #may be uncommented in order to use the IUT broker while it s up
+mesure=$(mosquitto_sub -h mqtt.iut-blagnac.fr -t "Student/by-room/$bat/data" -C 1) #may be uncommented in order to use the IUT broker while it s up
 
 nbTypes=$(echo "SELECT COUNT(\`type\`) FROM \`sae23\`.\`capteur\` JOIN \`sae23\`.\`batiment\` ON \`capteur\`.\`id-batiment\`=\`batiment\`.\`id-batiment\` WHERE \`batiment\`.\`id-batiment\`=\"$bat\";" | /opt/lampp/bin/mysql -h localhost -u sarrat -ppassroot | sed -n 2p)
 
@@ -29,7 +29,7 @@ echo "ID du capteur correspondant : $idCap"
 sujet=$(echo "SELECT type FROM \`sae23\`.\`capteur\` JOIN \`sae23\`.\`batiment\` ON \`capteur\`.\`id-batiment\`=\`batiment\`.\`id-batiment\` WHERE \`batiment\`.\`id-batiment\`=\"$bat\" LIMIT $y,1;" | /opt/lampp/bin/mysql -h localhost -u sarrat -ppassroot | sed -n 2p) #finds what type of measures are made by the sensor (e.g. : temperature, humidity...)
 echo "La mesure relevée est : $sujet"' >> $bat.sh
 
-echo 'date=$(date +%F) #current date on YYYY-MM-DD format
+echo 'date=$(date +"%d-%m-%Y") #current date on DD-MM-YYYY format
 heure=$(date +%X) #current hour on HH:MM:SS format' >> $bat.sh
 
 printf 'valeur=$(echo $mesure | jq ' >> $bat.sh
