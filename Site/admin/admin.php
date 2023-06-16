@@ -31,6 +31,7 @@
 			<p><a href="../gestionnaire/gestionnaire.php">Page gestionnaire</a></p></br>
 		</section>
 		<footer>
+			<p><a href="../index.php">Retour à l'accueil</a></p>
 		</footer>
 	</body>
 </html>

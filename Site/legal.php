@@ -2,9 +2,11 @@
 <html lang="fr">
 	<head>
 		<meta charset="UTF-8" />
-		<title>Accueil SAE23</title>
+		<title>Mentions légales</title>
 		<link rel="stylesheet" type="text/css" href="./styles/style.css" />
-	</head>
+	</head><body><header>
+			<h2 class="titre"><em>Mentions légales</em></h2> 
+		</header>
 <section class="section_legal">
                 <h2 class="h2_legal">Définitions</h2>
                 <p><strong>Client :</strong> tout professionnel ou personne physique capable au sens des articles 1123 et suivants du Code civil, ou personne morale, qui visite le Site objet des présentes conditions générales.<br>
@@ -215,3 +217,8 @@
                 Tout litige en relation avec l’utilisation du site <a href="http://sarrat.atwebpages.com/SAE23/index.php">http://sarrat.atwebpages.com/SAE23/index.php</a> est soumis au droit français. 
                 En dehors des cas où la loi ne le permet pas, il est fait attribution exclusive de juridiction aux tribunaux compétents de Toulouse</p>
             </section>
+		<footer></br>
+		<p><a href="index.php">Retour a l'accueil</a></p>
+		</br></footer>
+	</body>
+</html>

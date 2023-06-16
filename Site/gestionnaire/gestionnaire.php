@@ -170,6 +170,7 @@
 			?>
 		</section>
 		<footer>
+			<p><a href="../index.php">Retour à l'accueil</a></p>
 		</footer>
 	</body>
 </html>

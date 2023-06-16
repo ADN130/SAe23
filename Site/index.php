@@ -19,6 +19,15 @@
 		<br>
 		<p><a href="projet.php">Gestion de projet</a></p>
 		<br>
-		<p><a href="legal.php">Mentions legales</a></p>
+		<p><a href="legal.php">Mentions légales</a></p>
+		<br>
+		<p>
+			<strong>A propos du projet :</strong><br><br> Ce site web correspond à solution apportée au cahier des charges du projet SAE23.<br>
+			Développé par <em>Adnane BENSAID, Rayan ARROUD</em> et <em>Benjamin SARRAT</em>, ce projet a pour but la récupération, le traitement et l'affichage
+			de données provenant de capteurs en tous genres situés dans l'IUT de Blagnac.<br>
+			Ce site est l'interface Homme-machine vous permettant de visualiser les données récupérées et les métriques calculées par un script Bash
+			qui s'exécute régulièrement sur un serveur Lubuntu. Il est aussi possible de voir des graphiques évoluant selon les mesures relevées, grâce
+			à la création d'un flux NodeRed utilisant une base de données InfluxDB, et grâce à des courbes créées sous Grafana.			
+		</p>
 	</body>
 </html>

@@ -6,13 +6,13 @@
 		<link rel="stylesheet" type="text/css" href="./styles/style.css" />
 	</head>
 	<header>
-		<h2>Gestion de projet</h2>
+		<h2 class="titre">Gestion de projet</h2>
     </header>
 	<body>	
         <section>
             <h3>Diagramme de GANTT :</h3>
             </br>
-            <p><img src="images/ganttfinal.png" alt="GANTT" width="90%" height="90%"></p>
+            <p><img class="projet" src="images/ganttfinal.png" alt="GANTT" width="90%" height="90%"></p>
             </br>
             </section>
         </br>
@@ -20,17 +20,17 @@
             <h2>Outils collaboratifs utilisés</h2>
             <h3>Github</h3>
             </br>
-            <p><img src="images/gengit.png" alt="Github" width="75%" height="75%"></p>
+            <p><img class="projet" src="images/gengit.png" alt="Github" width="75%" height="75%"></p>
             </br>
-            <p><img src="images/sitegit.png" alt="Github" width="75%" height="75%"></p>
+            <p><img class="projet" src="images/sitegit.png" alt="Github" width="75%" height="75%"></p>
             </br>
-            <p><img src="images/scriptgit.png" alt="Github" width="75%" height="75%"></p>
+            <p><img class="projet" src="images/scriptgit.png" alt="Github" width="75%" height="75%"></p>
             </br>
             <p>Nous avons utilisé Github afin de pouvoir travailler en groupe sur la production de code php, html et css; la réalisation de script en bash et de requête sql.</p>
             </br>
             <h3>Google Drive :</h3>
             </br>
-            <p><img src="images/drive.png" alt="Google Drive" width="75%" height="75%"></p>
+            <p><img class="projet" src="images/drive.png" alt="Google Drive" width="75%" height="75%"></p>
             </br>
             <p>Nous avons utilisé Google Drive dans le partage de fichiers qui étaient différent de ceux de la programmation comme les images ou les diagramme de GANTT.</p>
         </section>
@@ -69,7 +69,7 @@
             </br>
             <h3>Benjamin :</h3>
             </br>
-            <p>Concernant la partie PHP, la gestion des sessions et des formulaires ont été un défi à cause du manque d’expérience dans le domaine, la ressource R209 m’a aidé à comprendre leur fonctionnement mais on a dû effectuer des recherches en parallèle pour pouvoir faire des formulaires basés sur des listes et protégés contre les injection SQL.</p>
+            <p>Concernant la partie PHP, la gestion des sessions et des formulaires ont été un défi à cause du manque d’expérience dans le domaine, la ressource R209 m’a aidé à comprendre leur fonctionnement mais on a dû effectuer des recherches en parallèle pour pouvoir faire des formulaires basés sur des listes et protégés contre les injection SQL.<br> La manière dont PHP gère les résulats des requêtes mySQL ont aussi posé problème. En effet les résultats des fonctions mysqli en PHP sont stockés en "array", c'est-à-dire en listes, j'ai donc eu souvent des erreurs dans mes variables car le résultat des requêtes n'étaient pas utilisables tels quels : la solution était de passer par la fonction mysqli_fetch_array pour pouvoir extraire les données de la liste et les utiliser dans des variables</p>
             </br>
             <h3>Rayan :</h3>
             </br>
