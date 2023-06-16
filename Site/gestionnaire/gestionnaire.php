@@ -14,7 +14,7 @@
 			<?php
 				session_start();
 				if ($_SESSION["auth"]!=TRUE)
-						header("Location:../login_error.php"); #if session login is different from admin then redirects to login error page
+						header("Location:../login_error.php"); #if session authentication is different from true then redirects to login error page
 
 				include ("../mysql.php");
 
@@ -23,17 +23,18 @@
 
 				/* Displaying database data  */
 				echo '<div class="tablo">';
-				echo "<p></br>Connecte en tant que <em>$utilisateur</em></p>";
+				echo "<p></br>Connecte en tant que <em>$utilisateur</em></p>"; #displays the user that is currently logged in
 				echo '</div>';
 				echo '</br>';
 
-				if ($_SESSION["login"]!="admin"){
+				if ($_SESSION["login"]!="admin"){ #if session login is different from admin, then proceeds to display measures et metrics of logged-in "gestionnaire"
 
-					$idBat="SELECT `id-batiment` FROM `batiment` WHERE `login`={$gui}{$utilisateur}{$gui}";
+					$idBat="SELECT `id-batiment` FROM `batiment` WHERE `login`={$gui}{$utilisateur}{$gui}"; #finds ID of building related to currently logged-in "gestionnaire"
 					$idBat=mysqli_query($id_bd, $idBat);
 					$idBat=mysqli_fetch_array($idBat);
 					$idBat=$idBat[0];
 
+					// Number of sensors 
 					$nbCapteurs="SELECT COUNT(`id-capteur`) FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui}";
 					$nbCapteurs=mysqli_query($id_bd, $nbCapteurs);
 					$nbCapteurs=mysqli_fetch_array($nbCapteurs);
@@ -47,7 +48,7 @@
 						$idCapteur=mysqli_fetch_array($idCapteur);
 						$idCapteur=$idCapteur[0];
 
-						$typeCapteur="SELECT `type` FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui} AND `capteur`.`id-capteur` = {$gui}{$idCapteur}{$gui} LIMIT {$i},1";
+						$typeCapteur="SELECT `type` FROM `capteur` JOIN `batiment` ON `capteur`.`id-batiment`=`batiment`.`id-batiment` WHERE `batiment`.`id-batiment`={$gui}{$idBat}{$gui} LIMIT {$i},1";
 						$typeCapteur=mysqli_query($id_bd, $typeCapteur);
 						$typeCapteur=mysqli_fetch_array($typeCapteur);
 						$typeCapteur=$typeCapteur[0];
