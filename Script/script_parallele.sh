@@ -1,19 +1,19 @@
 #!/bin/bash
 
-#indicating the path of the file to the crontab
+# Indicating the path of the file to the crontab for the automatisation 
 
-cd /home/a$user/Desktop/Sae23 
-
-# Verification of entered arguments 
-
-if [ $# -ne 2 ]; then
-    exit 1
-fi
+cd "$(pwd)"
 
 # Recuperation of the MySQL database id from the arguments
 
-user=$1
-password=$2
+echo "Entrez votre identifiant PHPmyAdmin :"
+read user
+
+# make sure the password is not displayed on the screen when it is entered 
+
+echo "Entrez votre mot de passe :"
+read -s password
+
 
 
 #-------------------------------------- SCRIPT PARALLELE -----------------------------------------
@@ -35,9 +35,9 @@ echo '#!/bin/bash
 
 # Using one of the both broker available according script execution time
 
-heure=$(date +%H)
+hour=$(date +%H)
 
-if [ $heure -ge 8 ] && [ $heure -lt 19 ]; then
+if [ $hour -ge 8 ] && [ $hour -lt 19 ]; then
     broker="mqtt.iut-blagnac.fr"
 else
     broker="127.0.0.1"
