@@ -1,53 +1,93 @@
 #!/bin/bash
 
-#Infinite loop
+#indicating the path of the file to the crontab
 
-while true
+cd /home/abensaid/Desktop/Sae23 
+
+# Verification of entered arguments 
+
+if [ $# -ne 2 ]; then
+    exit 1
+fi
+
+# Recuperation of the MySQL database id from the arguments
+
+user=$1
+password=$2
+
+
+#--------------------------------------SCRIPT DYNAMIQUE-----------------------------------------
+
+#finds how many buildings are in the "batiment" table
+
+nbBatiments=$(echo "SELECT COUNT(\`id-batiment\`) FROM \`sae23\`.\`batiment\`;" | /opt/lampp/bin/mysql -h localhost -u $user -p$password | sed -n 2p) 
+
+#displays how many buildings are in the database ("batiment" table)
+
+echo "Il y a $nbBatiments batiment(s) dans la base de données" 
+
+#loop that goes from 0 to the number of building not included
+
+for (( i=0; i<$nbBatiments; i++ )) 
 do
 
-#--------------------------------------SCRIPT DYNAMIQUE-----------------------------------------#
+#variable that contains the name of the building we will be accessing the measures of
 
-nbBatiments=$(echo "SELECT COUNT(\`id-batiment\`) FROM \`sae23\`.\`batiment\`;" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85 | sed -n 2p) #finds how many buildings are in the "batiment" table
+bat=$(echo "SELECT \`id-batiment\` FROM \`sae23\`.\`batiment\` LIMIT $i,1;" | /opt/lampp/bin/mysql -h localhost -u $user -p$password | sed -n 2p) 
+echo "Bâtiment traité : $bat"
 
-echo "Il y a $nbBatiments batiment(s) dans la base de données"
 
-for (( i=0; i<$nbBatiments; i++ )) #loop that goes from 0 to the number of building minus one
+# Using one of the both broker available according script execution time
 
+heure=$(date +%H)
+
+
+if [ $heure -ge 8 ] && [ $heure -lt 19 ]; then
+    broker="mqtt.iut-blagnac.fr"
+else
+    broker="127.0.0.1"
+fi
+
+
+mesure=$(mosquitto_sub -h $broker -t "Student/by-room/$bat/data" -C 1)
+
+
+#finds how many sensors are in the building currently processed
+
+nbTypes=$(echo "SELECT COUNT(\`type\`) FROM \`sae23\`.\`capteur\` JOIN \`sae23\`.\`batiment\` ON \`capteur\`.\`id-batiment\`=\`batiment\`.\`id-batiment\` WHERE \`batiment\`.\`id-batiment\`=\"$bat\";" | /opt/lampp/bin/mysql -h localhost -u $user -p$password | sed -n 2p) 
+
+#loop that goes from 0 to the number of sensors in the building unincluded
+
+for (( y=0; y<$nbTypes; y++ )) 
 do
 
-bat=$(echo "SELECT nom FROM \`sae23\`.\`batiment\` LIMIT $i,1;" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnae85 | sed -n 2p) #variable that contains the name of the building we will be accessing the measures of
-echo "Bâtiment traité : $bat "
+#finds the ID of the sensor located in the current building
 
-#mesure=$(mosquitto_sub -h mqtt.iut-blagnac.fr -t "Student/by-room/$bat/data" -C 1) #may be uncommented in order to use the IUT broker while it's up
-mesure=$(mosquitto_sub -h 127.0.0.1 -t "Student/by-room/$bat/data" -C 1) #used together with the broker.sh script for faster debugging
-
-idCap=$(echo "SELECT \`id-capteur\` FROM \`sae23\`.\`capteur\` JOIN \`sae23\`.\`batiment\` ON \`capteur\`.\`id-batiment\`=\`batiment\`.\`id-batiment\` WHERE \`batiment\`.\`nom\`=\"$bat\" LIMIT 0,1;" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85 | sed -n 2p) #finds the ID of the sensor located in the current building
+idCap=$(echo "SELECT \`id-capteur\` FROM \`sae23\`.\`capteur\` JOIN \`sae23\`.\`batiment\` ON \`capteur\`.\`id-batiment\`=\`batiment\`.\`id-batiment\` WHERE \`batiment\`.\`id-batiment\`=\"$bat\" LIMIT $y,1;" | /opt/lampp/bin/mysql -h localhost -u $user -p$password | sed -n 2p) 
 echo "ID du capteur correspondant : $idCap"
 
-sujet=$(echo "SELECT type FROM \`sae23\`.\`capteur\` JOIN \`sae23\`.\`batiment\` ON \`capteur\`.\`id-batiment\`=\`batiment\`.\`id-batiment\` WHERE \`batiment\`.\`nom\`=\"$bat\" LIMIT 0,1 ;" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85 | sed -n 2p) #finds what type of measures are made by the sensor (e.g. : temperature, humidity...)
+#finds what type of measures are made by the sensor (e.g. : temperature, humidity...)
+
+sujet=$(echo "SELECT type FROM \`sae23\`.\`capteur\` JOIN \`sae23\`.\`batiment\` ON \`capteur\`.\`id-batiment\`=\`batiment\`.\`id-batiment\` WHERE \`batiment\`.\`id-batiment\`=\"$bat\" LIMIT $y,1;" | /opt/lampp/bin/mysql -h localhost -u $user -p$password | sed -n 2p) 
 echo "La mesure relevée est : $sujet"
 
-date=$(date +%F) #current date on YYYY-MM-DD format
-heure=$(date +%X) #current hour on HH:MM:SS format
-valeur=$(echo $mesure | jq '.[0].'$sujet) #extracts the value from the JSON payload according to what type of sensor measured it
+
+#current date on DD-MM-YYYY format with the hour 
+
+date=$(date +"%d-%m-%Y") 
+heure=$(date +%X) 
+
+#extracts the value from the JSON payload according to what type of sensor measured it
+
+valeur=$(echo $mesure | jq '.[0].'$sujet) 
 
 echo "La valeur relevée est $valeur"
 
-echo "INSERT INTO sae23.mesure (\`date\`, \`heure\`, \`valeur\`, \`id-capteur\`) VALUES ('$date', '$heure', '$valeur', '$idCap');" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85 #inserts the complete measure into the "mesure" table
+#Insertion in the SQL database
 
-
-# Metrics
-
-avg_temp=$(echo "SELECT AVG(\`valeur\`) FROM sae23.mesure WHERE \`id-capteur\` = '$idCap';" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85 | awk 'NR==2{printf "%.2f", $1}')
-    min_temp=$(echo "SELECT MIN(\`valeur\`) FROM sae23.mesure WHERE \`id-capteur\` = '$idCap';" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85 | awk 'NR==2{print $1}')
-    max_temp=$(echo "SELECT MAX(\`valeur\`) FROM sae23.mesure WHERE \`id-capteur\` = '$idCap';" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85 | awk 'NR==2{print $1}')
-
-#password encryption 
-
-chif_ad=$(echo "UPDATE \`sae23\`.\`administration\` SET mdp = CONCAT('md5:', MD5(mdp));" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85)
-chif_bat=$(echo "UPDATE \`sae23\`.\`batiment\` SET mdp = CONCAT('md5:', MD5(mdp));" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85)
+echo "INSERT INTO sae23.mesure (\`date\`, \`heure\`, \`valeur\`, \`id-capteur\`) VALUES ('$date', '$heure', '$valeur', '$idCap');" | /opt/lampp/bin/mysql -h localhost -u $user -p$password 
 
 
 done
-done
 
+done
