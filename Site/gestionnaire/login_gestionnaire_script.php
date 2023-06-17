@@ -1,6 +1,7 @@
 <?php
 	session_start();
 	
+	// Session variables, "auth" is set to "FALSE" by default
 	$_SESSION["auth"]=FALSE;
 	$_SESSION["login"]=$_POST["login"];
 	$_SESSION["mdp"]=$_POST["mdp"];
@@ -29,9 +30,11 @@
 		$pass = mysqli_fetch_row($pass);
 		$pass=$pass[0];
 
+
+		/* If user input matches with admin name and password then authentication is made, else user is redirected to login error page */
 		if ($utilisateur==$user) 
 		 {
-		 	if ($motdep==$pass) #if user input matches with admin account credentials then connection is made
+		 	if ($motdep==$pass) 
 		 		{
 					$_SESSION["auth"]=TRUE;		
             		mysqli_close($id_bd);
@@ -39,19 +42,11 @@
 		 		}
 		 	else
 		    	{
-					$_SESSION = array();
-            		session_destroy();  
-            		unset($_SESSION); 
-            		mysqli_close($id_bd);
             		echo "<script type='text/javascript'>document.location.replace('../login_error.php');</script>"; // Redirection on failed login
 				}
 		 }
 		else
 		 {
-			$_SESSION = array();
-            session_destroy();  
-            unset($_SESSION); 
-            mysqli_close($id_bd);
             echo "<script type='text/javascript'>document.location.replace('../login_error.php');</script>"; // Redirection on failed login
 		 }
      } 

@@ -12,9 +12,12 @@
 				<hr/>
 			</div>
 			<?php
+				// Session starts or is resumed
 				session_start();
+
+				// If session login is different from "admin" then redirects to "login_error" page
 				if ($_SESSION["login"]!="admin")
-						header("Location:../login_error.php"); #if session login is different from admin then redirects to login error page
+						header("Location:../login_error.php");
 			?>
 		</section>
 		<section>
@@ -25,8 +28,10 @@
 				  	<span></span>
 				  	<label for="nom">Nom du batiment</label>
 		    	</div>
+
 		    	<div class="mult_choice">
-					<label for="type">Types de capteurs (CTRL + clic pour séléctionner plusieurs)</label> <!--list of sensors which can be selected-->
+					<label for="type">Types de capteurs (CTRL + clic pour séléctionner plusieurs)</label>
+					<!--list of sensors which can be selected-->
 				  	<select name="type[]" multiple="multiple">
 						<option value="temperature">Temperature</option>
 						<option value="humidity">Humidite</option>

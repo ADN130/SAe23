@@ -12,11 +12,16 @@
 				<hr/>
 			</div>
 			<?php
-				session_start(); #beginning of the session
+				// Session starts or is resumed
+				session_start();
+				
+				// If session login is different from "admin" then redirects to "login_error" page
 				if ($_SESSION["login"]!="admin")
-						header("Location:../login_error.php"); #if session login is different from admin then redirects to login error page
+						header("Location:../login_error.php");
+
 				$utilisateur=$_SESSION["login"];
-				/* Displaying database data  */
+
+				/* Displaying user data */
 				echo '<div>';
 					echo "<p></br>Connecte en tant que <em>$utilisateur</em></p>";
 
@@ -25,13 +30,15 @@
 			</br>
 			<hr/>
 		</section>
+
 		<section>
 			<p><a href="ajout_rapide.php">Ajout rapide</a></p></br>
 			<p><a href="retrait_rapide.php">Retrait rapide</a></p></br>
 			<p><a href="../gestionnaire/gestionnaire.php">Page gestionnaire</a></p></br>
 		</section>
+
 		<footer>
-			<p><a href="../index.php">Retour à l'accueil</a></p>
+			<p><a href="../logout.php">Déconnexion</a></p>
 		</footer>
 	</body>
 </html>
