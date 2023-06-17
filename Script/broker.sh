@@ -1,7 +1,13 @@
-
 #!/bin/bash
 
-#--------------------------------------BROKER DYNAMIQUE-----------------------------------------
+echo "Entrez votre identifiant PHPmyAdmin :"
+read user
+echo "Entrez votre mot de passe :"
+read password
+
+#--------------------------------------BROKER DYNAMIQUE (BOUCHONNAGE)-----------------------------------------
+
+# This broker is used as a stub for fast and reliable debugging of script.sh
 
 #generation of a random 2 digits integer (from 00 to 99)
 
@@ -20,7 +26,7 @@ payload=[{\"temperature\":$temp,\"humidity\":$hum,\"activity\":$act,\"co2\":$co2
 
 #finds how many buildings are in the "batiment" table
 
-nbBatiments=$(echo "SELECT COUNT(\`id-batiment\`) FROM \`sae23\`.\`batiment\`;" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85 | sed -n 2p) 
+nbBatiments=$(echo "SELECT COUNT(\`id-batiment\`) FROM \`sae23\`.\`batiment\`;" | /opt/lampp/bin/mysql -h localhost -u $user -p$password | sed -n 2p) 
 
 #loop that goes from 0 to the number of building minus one
 
@@ -28,14 +34,13 @@ for (( i=0; i<$nbBatiments; i++ ))
 
 do
 
-bat=$(echo "SELECT \`id-batiment\` FROM \`sae23\`.\`batiment\` LIMIT $i,1;" | /opt/lampp/bin/mysql -h localhost -u bensaid -padnane85 | sed -n 2p) #finds which building i.e. which sensor is used (depending on room you chosed)
-echo $bat
+bat=$(echo "SELECT \`id-batiment\` FROM \`sae23\`.\`batiment\` LIMIT $i,1;" | /opt/lampp/bin/mysql -h localhost -u $user -p$password | sed -n 2p) #finds which building i.e. which sensor is used (depending on room you chosed)
 
 #publishes the JSON payload to the topic of the current building
 
 mosquitto_pub -h 127.0.0.1 -t Student/by-room/$bat/data -m $payload 
 
-sleep 5 #waits for 2 seconds so that the mosquitto_sub can keep up
+sleep 2 #waits for 2 seconds so that the mosquitto_sub can keep up
 
 done
 
