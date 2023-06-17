@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Indicating the path of the file to the crontab for the automatisation 
-
-cd "$(pwd)"
-
 # Recuperation of the MySQL database id from the arguments
 
 echo "Entrez votre identifiant PHPmyAdmin :"

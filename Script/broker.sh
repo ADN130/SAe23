@@ -1,13 +1,10 @@
 #!/bin/bash
 
-
 # Recuperation of the MySQL database id from the arguments
-
 echo "Entrez votre identifiant PHPmyAdmin :"
 read user
 
-# make sure the password is not displayed on the screen when it is entered 
-
+# Makes sure the password is not displayed on the screen when it is entered 
 echo "Entrez votre mot de passe :"
 read -s password
 

@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Indicating the path of the file to the crontab for the automatisation 
-
-cd "$(pwd)"
-
 # Recuperation of the MySQL database id from the arguments
 
 echo "Entrez votre identifiant PHPmyAdmin :"
@@ -15,8 +11,7 @@ echo "Entrez votre mot de passe :"
 read -s password
 
 
-
-#-------------------------------------- SCRIPT PARALLELE -----------------------------------------
+#--------------------------------------SCRIPT PARALLELE-----------------------------------------
 
 nbBatiments=$(echo "SELECT COUNT(\`id-batiment\`) FROM \`sae23\`.\`batiment\`;" | /opt/lampp/bin/mysql -h localhost -u $user -p$password | sed -n 2p)
 
@@ -105,6 +100,12 @@ chmod 777 $bat.sh
 
 var='$bat'
 sed -i "s/$var/$bat/g" $bat.sh
+
+var='$user'
+sed -i "s/$var/$user/g" $bat.sh
+
+var='$password'
+sed -i "s/$var/$password/g" $bat.sh
 
 ./$bat.sh &
 
