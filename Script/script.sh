@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Indicating the path of the file to the crontab
+# Indicating the path of the file to the crontab for the automatisation 
 
-#cd /home/abensaid/Desktop/Sae23 
+cd "$(pwd)"
 
 # Recuperation of the MySQL database id from the arguments
 

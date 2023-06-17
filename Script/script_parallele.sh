@@ -1,19 +1,15 @@
 #!/bin/bash
 
-#indicating the path of the file to the crontab
+# Indicating the path of the file to the crontab for the automatisation 
 
-cd /home/a$user/Desktop/Sae23 
-
-# Verification of entered arguments 
-
-if [ $# -ne 2 ]; then
-    exit 1
-fi
+cd "$(pwd)"
 
 # Recuperation of the MySQL database id from the arguments
 
-user=$1
-password=$2
+echo "Entrez votre identifiant PHPmyAdmin :"
+read user
+echo "Entrez votre mot de passe :"
+read password
 
 
 #-------------------------------------- SCRIPT PARALLELE -----------------------------------------
